@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Евклид — проектные решения</title>
+  <meta name="description" content="Учебный проект Евклид: проектные решения, этапы работы и ответы на вопросы. Адаптивный интерфейс для портфолио.">
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/swiper-bundle.min.css">
   <link rel="stylesheet" href="css/style.css">
@@ -12,50 +13,52 @@
   <link rel="stylesheet" href="css/media-1024.css">
   <link rel="stylesheet" href="css/media-768.css">
   <link rel="stylesheet" href="css/media-320.css">
+  <link rel="stylesheet" href="css/improvements.css">
 </head>
-<body>
+<body id="top">
+  <a class="skip-link" href="#main">Перейти к содержимому</a>
   <header class="header">
     <div class="container header__container">
-      <button aria-label="открыть меню"class="burger btn-reset">
+      <button aria-label="Открыть меню" aria-controls="site-navigation" aria-expanded="false" class="burger btn-reset">
         <span class="burger__line"></span>
         <span class="burger__line"></span>
         <span class="burger__line"></span>
       </button>
-      <a href="" class="logo header__logo">
+      <a href="#top" class="logo header__logo">
         <img class="logo__img" src="img/logo.svg" alt="Логотип ЕВКЛИД">
       </a>
       <div class="header__inner">
-        <nav class="nav">
-          <button class="menu-close btn-reset"></button>
+        <nav class="nav" id="site-navigation" aria-label="Основная навигация">
+          <button aria-label="Закрыть меню" class="menu-close btn-reset"></button>
           <ul class="nav__list list-reset">
-            <li class="nav__item"><a href="#" class="nav__link">О нас</a></li>
-            <li class="nav__item"><a href="#" class="nav__link">Проекты</a></li>
-            <li class="nav__item"><a href="#" class="nav__link">Этапы</a></li>
-            <li class="nav__item"><a href="#" class="nav__link">Отзывы</a></li>
-            <li class="nav__item"><a href="#" class="nav__link">Контакты</a></li>
+            <li class="nav__item"><a href="#about" class="nav__link">О нас</a></li>
+            <li class="nav__item"><a href="#projects" class="nav__link">Проекты</a></li>
+            <li class="nav__item"><a href="#work" class="nav__link">Этапы</a></li>
+            <li class="nav__item"><a href="#questions" class="nav__link">Вопросы</a></li>
+            <li class="nav__item"><a href="#contacts" class="nav__link">Контакты</a></li>
           </ul>
         </nav>
         <div class="search" aria-label="открыть меню">
-          <button class="search_button"></button>
+          <button class="search_button" aria-label="Открыть поиск"></button>
         </div>
         <div class="search_active" aria-label="поиск на сайте">
-          <button class="search_button"></button>
+          <button class="search_button" aria-label="Открыть поиск"></button>
         </div>
       </div>
     </div>
   </header>
-  <main>
+  <main id="main" tabindex="-1">
     <section class="hero">
       <h1 class="visually-hidden">
-        Создания проектов Евклид
+        Проектные решения Евклид
       </h1>
       <div class="container hero__container">
         <div class="swiper-container">
           <div class="search-content">
             <form action="#" class="search-content__form">
-              <input type="text" class="search-content-form__input" placeholder="Что будем искать">
-              <button type="button" class="search-content-form__button-submit"></button>
-              <button type="button" class="search-content-form__button-cancel"></button>
+              <input class="search-content-form__input" name="query" aria-label="Поиск по сайту" type="search" placeholder="Что будем искать">
+              <button type="submit" class="search-content-form__button-submit" aria-label="Найти"></button>
+              <button type="button" class="search-content-form__button-cancel" aria-label="Закрыть поиск"></button>
             </form>
           </div>
           <div class="hero-content">
@@ -78,13 +81,13 @@
         </div>
       </div>
     </section>
-    <section class="about">
+    <section class="about" id="about" tabindex="-1">
       <div class="container about__container">
         <h2 class="about__heading site-heading">О нас</h2>
         <p class="about__text">
           Также как перспективное планирование создаёт необходимость включения в производственный план целого ряда внеочередных мероприятий с учётом комплекса экспериментов, поражающих по своей масштабности и грандиозности. А также диаграммы связей могут быть описаны максимально подробно. Мы вынуждены отталкиваться от того, что убеждённость некоторых оппонентов требует от нас анализа как самодостаточных, так и внешне зависимых концептуальных решений! Следует отметить, что высококачественный прототип <span class="abut__tooltip" style="background-image: url('img/tooltip.svg');"></span> будущего проекта предопределяет высокую востребованность позиций, занимаемых участниками в отношении поставленных задач. Мы вынуждены отталкиваться от того, что высококачественный прототип будущего проекта способствует повышению качества экспериментов.
         </p>
-        <div class="about-content">
+        <div class="about-content" id="projects" tabindex="-1">
           <div class="about-content__left" style="background-image: url('img/about-bg.jpg');">
             <div class="about-left__inner">
               <p class="about-left__text">
@@ -110,7 +113,7 @@
         </div>
       </div>
     </section>
-    <section class="work">
+    <section class="work" id="work" tabindex="-1">
       <div class="container work__container">
         <h2 class="work__headeing site-heading">Как мы работаем</h2>
         <ul class="work__list list-reset">
@@ -213,7 +216,7 @@
           </div>
       </div>
     </section>
-    <section class="questions">
+    <section class="questions" id="questions" tabindex="-1">
       <div class="container">
         <h2 class="questions__heading site-heading">Часто задаваемые вопросы</h2>
         <div class="questions__accordion" id="accordion">
@@ -275,21 +278,21 @@
       </div>
     </section>
   </main>
-  <footer class="footer">
+  <footer class="footer" id="contacts" tabindex="-1">
     <div class="container footer__container">
       <div class="footer-left">
-        <a class="footer__logo" href="#">
+        <a class="footer__logo" href="#top">
           <img src="img/footer-logo.png" alt="">
         </a>
         <ul class="footer__list list-reset">
           <li class="footer__item">
-            <a href="#" class="footer__link">О нас</a>
+            <a href="#about" class="footer__link">О нас</a>
           </li>
           <li class="footer__item">
-            <a href="#" class="footer__link">Проекты</a>
+            <a href="#projects" class="footer__link">Проекты</a>
           </li>
           <li class="footer__item">
-            <a href="#" class="footer__link">Отзывы</a>
+            <a href="#questions" class="footer__link">Вопросы</a>
           </li>
           <li class="footer__item">
             <a href="#" class="footer__link">Договор оферты</a>
@@ -327,17 +330,18 @@
       <div class="footer-right">
         <div class="footer-wrapper">
           <h3 class="footer__title">Оставить заявку</h3>
-        <form class="footer__form" action="#">
-          <input type="text" class="form__input" placeholder="Фамилия, имя и отчество*">
-          <input type="text" class="form__input" placeholder="E-mail*">
-          <textarea class="form__area" name="#" id="#" cols="30" rows="10" placeholder="Сообщение"></textarea>
+        <form class="footer__form">
+          <input type="text" class="form__input" name="name" autocomplete="name" aria-label="Фамилия, имя и отчество" required maxlength="100" placeholder="Фамилия, имя и отчество*">
+          <input type="email" class="form__input" name="email" autocomplete="email" aria-label="Email" required maxlength="254" placeholder="E-mail*">
+          <textarea class="form__area" name="message" id="message" aria-label="Сообщение" maxlength="3000" cols="30" rows="10" placeholder="Сообщение"></textarea>
           <div class="form__inner">
             <button class="form__btn site-btn">Отправить данные</button>
             <label class="form__label">
-              <input class="checkbox" type="checkbox">
+              <input class="checkbox" type="checkbox" name="consent" required>
               <span class="checkbox-text">Согласен на обработку данных</span>
             </label>
           </div>
+          <p class="form-status" role="status"></p>
         </form>
         </div>
         <p class="footer__text">
@@ -348,8 +352,8 @@
     </div>
   </footer>
   <script src="js/swiper-bundle.min.js"></script>
-  <script src="js/jquery-3.5.1.min.js"></script>
-  <script src="js/jquery-ui.min.js"></script>
+  
+  
   <script src="js/script.js"></script>
 </body>
 </html>

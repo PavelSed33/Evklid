@@ -1,82 +1,36 @@
-/* slider */
-  const swiper = new Swiper( '.swiper-container' , {
-    loop: true,
-
-    pagination: {
-      el: '.swiper-pagination',
-      clickable: true,
-      type: 'bullets'
-    },
-
-    
-    speed: 300,
-    a11y: {
-      paginationBulletMessage: "Слайд {{index}}"
-    },
-  });
-
-
-
-  /* work-tabs */
-  document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.work__btn').forEach(function (e) {
-      e.addEventListener('click', function (e) {
-        const tab = e.currentTarget.dataset.path;
-        document.querySelectorAll('.tab-content').forEach(function (e) {
-          e.classList.remove('tab-content--active')
-          document.querySelector(`[data-target='${tab}']`).classList.add('tab-content--active');
-        });
-      });
-
-      e.addEventListener('click', function (e) {
-        const tabDefault = e.currentTarget.dataset.default;
-        document.querySelectorAll('.work__btn').forEach(function (e) {
-          e.classList.remove('work__btn--default')
-          document.querySelector(`[data-path='${tabDefault}']`).classList.add('work__btn--default');
-        });
-      });
-
-    });
-  })
-
-  // search_form
-
-$('.search').
-   on('mouseover', function() {
-  $('.search_button').css('background', 'url(img/search_hover.png) no-repeat center center');
-}).on('mouseout', function() {
-  $('.search_button').css('background', 'url(img/search_default.png) no-repeat center center');
-}).on('click', function() {
-  $(this).css('display', 'none').next().css('display', 'flex');
-  $('.search-content__form').css('display', 'flex');
-})
-
-$('.search-content-form__button-cancel').on('click', function() {
-  $('.search-content-form__input').val("");
-  $('.search-content__form').css('display', 'none');
-  $('.search').next().css('display', 'none').prev().css('display', 'flex');
-})
-
-
-  // accordion
-  $(function() {
-    $("#accordion").accordion({
-      collapsible: true,
-      heightStyle: 'content',
-    });
-  });
-
-  //bruger
-  const burgerBtn = document.querySelector('.burger');
-  const menuClose = document.querySelector('.menu-close');
-  const menuBurger = document.querySelector('.nav');
-
-  burgerBtn.addEventListener('click', () => {
-    menuBurger.classList.add('burger-active');
-  });
-
-  menuClose.addEventListener('click', () => {
-    menuBurger.classList.remove('burger-active');
-  });
-
-
+'use strict';
+const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(typeof Swiper==='function')new Swiper('.swiper-container',{loop:true,speed:reducedMotion?0:300,pagination:{el:'.swiper-pagination',clickable:true,type:'bullets'},a11y:{paginationBulletMessage:'Слайд {{index}}'}});
+const nav=document.querySelector('.nav'),burger=document.querySelector('.burger'),closeMenu=document.querySelector('.menu-close');
+function toggleMenu(open,restore=false){
+  nav.classList.toggle('burger-active',open);burger.setAttribute('aria-expanded',String(open));
+  if(innerWidth<=1120)nav.inert=!open;else nav.inert=false;
+  if(open){closeSearch(false);closeMenu.focus();}else if(restore)burger.focus();
+}
+burger.addEventListener('click',()=>toggleMenu(burger.getAttribute('aria-expanded')!=='true'));
+closeMenu.addEventListener('click',()=>toggleMenu(false,true));
+nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>toggleMenu(false)));
+addEventListener('resize',()=>toggleMenu(false));toggleMenu(false);
+document.addEventListener('click',e=>{if(nav.classList.contains('burger-active')&&!nav.contains(e.target)&&!burger.contains(e.target))toggleMenu(false);});
+const searchTrigger=document.querySelector('.search .search_button'),searchForm=document.querySelector('.search-content__form'),searchInput=searchForm.querySelector('input');
+const searchStatus=document.createElement('p');searchStatus.className='search-status';searchStatus.setAttribute('role','status');document.querySelector('.search-content').append(searchStatus);
+function closeSearch(restore=true){searchForm.classList.remove('is-open');searchTrigger.setAttribute('aria-expanded','false');searchStatus.textContent='';if(restore)searchTrigger.focus();}
+searchTrigger.setAttribute('aria-expanded','false');
+searchTrigger.addEventListener('click',()=>{toggleMenu(false);searchForm.classList.add('is-open');searchTrigger.setAttribute('aria-expanded','true');searchInput.focus();});
+searchForm.querySelector('.search-content-form__button-cancel').addEventListener('click',()=>closeSearch());
+const tabs=[...document.querySelectorAll('.work__btn')],panels=[...document.querySelectorAll('.tab-content')];
+document.querySelector('.work__list').setAttribute('role','tablist');document.querySelector('.work__list').setAttribute('aria-label','Этапы работы');
+function activateTab(key,focus=false){tabs.forEach(button=>{const selected=button.dataset.path===key;button.classList.toggle('work__btn--default',selected);button.setAttribute('aria-selected',String(selected));button.tabIndex=selected?0:-1;if(selected&&focus)button.focus();});panels.forEach(panel=>{const selected=panel.dataset.target===key;panel.classList.toggle('tab-content--active',selected);panel.hidden=!selected;});}
+tabs.forEach((button,i)=>{const key=button.dataset.path;button.id=`tab-${key}`;button.setAttribute('role','tab');button.setAttribute('aria-controls',`panel-${key}`);button.parentElement.setAttribute('role','presentation');button.addEventListener('click',()=>activateTab(key));button.addEventListener('keydown',e=>{let index=i;if(e.key==='ArrowRight')index=(i+1)%tabs.length;else if(e.key==='ArrowLeft')index=(i+tabs.length-1)%tabs.length;else if(e.key==='Home')index=0;else if(e.key==='End')index=tabs.length-1;else return;e.preventDefault();activateTab(tabs[index].dataset.path,true);});});
+panels.forEach(panel=>{panel.id=`panel-${panel.dataset.target}`;panel.setAttribute('role','tabpanel');panel.setAttribute('aria-labelledby',`tab-${panel.dataset.target}`);panel.tabIndex=0;});activateTab('one');
+const questions=[...document.querySelectorAll('.questions__title')];
+function openQuestion(index,open){questions.forEach((h,i)=>{const button=h.querySelector('button'),panel=h.parentElement.nextElementSibling;const active=i===index&&open;button.setAttribute('aria-expanded',String(active));panel.hidden=!active;h.parentElement.classList.toggle('ui-state-active',active);});}
+questions.forEach((heading,i)=>{heading.removeAttribute('tabindex');const button=document.createElement('button');button.type='button';button.className='question-toggle';button.id=`question-${i}`;button.innerHTML=heading.innerHTML;button.setAttribute('aria-controls',`answer-${i}`);heading.replaceChildren(button);const panel=heading.parentElement.nextElementSibling;panel.id=`answer-${i}`;panel.classList.add('ui-accordion-content');panel.setAttribute('aria-labelledby',button.id);button.addEventListener('click',()=>openQuestion(i,button.getAttribute('aria-expanded')!=='true'));});openQuestion(0,true);
+function visit(id){const target=document.getElementById(id);target?.scrollIntoView({behavior:reducedMotion?'auto':'smooth',block:'start'});target?.focus({preventScroll:true});}
+searchForm.addEventListener('submit',e=>{e.preventDefault();const query=searchInput.value.trim().toLocaleLowerCase('ru');if(!query){searchStatus.textContent='Введите слово для поиска.';return;}const found=[...document.querySelectorAll('main section')].find(section=>section.textContent.toLocaleLowerCase('ru').includes(query));if(!found){searchStatus.textContent='Ничего не найдено. Попробуйте другое слово.';return;}const panel=[...found.querySelectorAll('.tab-content')].find(x=>x.textContent.toLocaleLowerCase('ru').includes(query));if(panel)activateTab(panel.dataset.target);const question=questions.findIndex(h=>h.parentElement.parentElement===found.querySelector('#accordion')&&(h.textContent+h.parentElement.nextElementSibling.textContent).toLocaleLowerCase('ru').includes(query));if(question>=0)openQuestion(question,true);closeSearch(false);if(found.id)visit(found.id);else visit('main');});
+const form=document.querySelector('.footer__form');form.addEventListener('submit',e=>{e.preventDefault();if(form.reportValidity())form.querySelector('.form-status').textContent='Учебный проект: данные проверены, но заявка не отправлена. Сервер обработки заявок не подключён.';});
+document.querySelector('.hero-content__btn').addEventListener('click',()=>{visit('contacts');form.querySelector('input').focus({preventScroll:true});});
+document.querySelectorAll('.about-left__btn,.work-left__btn:not(.work-left__btn--border)').forEach(button=>button.addEventListener('click',()=>visit('work')));
+const dialog=document.createElement('dialog');dialog.className='demo-dialog';dialog.innerHTML='<h2>Учебный проект</h2><p>В этой демонстрации документы и внешние сервисы не подключены.</p><button class="site-btn" type="button">Понятно</button>';document.body.append(dialog);dialog.querySelector('button').addEventListener('click',()=>dialog.close());dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});
+document.querySelectorAll('.work-left__btn--border,.footer a[href="#"]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();dialog.showModal();}));document.querySelector('.footer__logo').setAttribute('href','#top');
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(nav.classList.contains('burger-active'))toggleMenu(false,true);if(searchForm.classList.contains('is-open'))closeSearch();}if(e.key==='Tab'&&nav.classList.contains('burger-active')){const controls=[closeMenu,...nav.querySelectorAll('a')];if(e.shiftKey&&document.activeElement===controls[0]){e.preventDefault();controls.at(-1).focus();}else if(!e.shiftKey&&document.activeElement===controls.at(-1)){e.preventDefault();controls[0].focus();}}});
